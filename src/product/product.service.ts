@@ -39,16 +39,41 @@ export class ProductService {
       return { statusCode: 500, message: err?.errors?.start?.message };
     }
   }
+  async deleteOneProduct(id: string): Promise<any> {
+    try {
+      const deleted = await this.productModel.findByIdAndDelete(id);
+      console.log(deleted);
+      return {
+        statusCode: 200,
+        message: 'sucessfully deleted',
+        error: false,
+      };
+    } catch (err) {
+      err.stack;
+      return { statusCode: 500, message: err?.errors?.start?.message };
+    }
+  }
   async updateProduct(id: string, product: Partial<Product>): Promise<any> {
     try {
       const isUpdated = await this.productModel.updateOne(
         { _id: id },
         {
-          $set: {
-            product,
-          },
+          $set: product,
         },
       );
+
+      if (isUpdated.modifiedCount > 0) {
+        return {
+          statusCode: 200,
+          message: 'sucessfully updated',
+          error: false,
+        };
+      }
+      return {
+        statusCode: 400,
+        message: 'cannot update',
+        error: true,
+      };
     } catch (err) {
       err.stack;
       return { statusCode: 500, message: err?.errors?.start?.message };

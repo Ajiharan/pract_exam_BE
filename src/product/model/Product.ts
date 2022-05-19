@@ -5,7 +5,7 @@ export interface Product {
   part: number;
   label: string;
   start: number;
-  received: number;
+  received: number; 
   onHand: number;
   minimum: number;
 }
